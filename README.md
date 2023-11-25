@@ -64,126 +64,71 @@ A program that can help analyse passing links and networks among players, also l
 
 # Plotting the Visual
 
-# Specify the URL or local path to the Oswald font file
-oswald_font_url = "https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/Oswald%5Bwght%5D.ttf"
+    #Specify the URL or local path to the Oswald font file
+    oswald_font_url = "https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/Oswald%5Bwght%5D.ttf"
 
-# Create the FontManager instance
-oswald_regular = FontManager(oswald_font_url)
+    #Create the FontManager instance
+    oswald_regular = FontManager(oswald_font_url)
 
-TEAM1 = input("ENTER TEAM1 NAME")
-TEAM2 = input("ENTER TEAM1 NAME")
-
-
-# Define your parameters
-MAX_LINE_WIDTH = 500
-MAX_MARKER_SIZE = 1500
-MIN_TRANSPARENCY = 0.0
-
-# Calculate line width and marker size based on your data
-pass_between_home['width'] = (pass_between_home.pass_count / pass_between_home.pass_count.max() * MAX_LINE_WIDTH)
-avg_loc_home['marker_size'] = (avg_loc_home['count'] / avg_loc_home['count'].max() * MAX_MARKER_SIZE)
-
-# Calculate color and transparency
-color = np.array(to_rgba('purple'))
-color = np.tile(color, (len(pass_between_home), 1))
-c_transparency = pass_between_home.pass_count / pass_between_home.pass_count.max()
-c_transparency = (c_transparency * (1 - MIN_TRANSPARENCY)) + MIN_TRANSPARENCY
-color[:, 3] = c_transparency
+    TEAM1 = input("ENTER TEAM1 NAME")
+    TEAM2 = input("ENTER TEAM1 NAME")
 
 
+    #Define your parameters
+    MAX_LINE_WIDTH = 500
+    MAX_MARKER_SIZE = 1500
+    MIN_TRANSPARENCY = 0.0
 
-# Create a VerticalPitch object
-pitch = VerticalPitch(
-    pitch_type="opta",
-    pitch_color="white",
-    line_color="black",
-    linewidth=1,
-)
+    #Calculate line width and marker size based on your data
+    pass_between_home['width'] = (pass_between_home.pass_count / pass_between_home.pass_count.max() * MAX_LINE_WIDTH)
+    avg_loc_home['marker_size'] = (avg_loc_home['count'] / avg_loc_home['count'].max() * MAX_MARKER_SIZE)
 
-fig, axs = pitch.grid(ncols=2,title_height=0.08, endnote_space=0,
-                      # Turn off the endnote/title axis. I usually do this after
-                      # I am happy with the chart layout and text placement
-                      axis=False,
-                      title_space=0, grid_height=0.82, endnote_height=0.05)
+    #Calculate color and transparency
+    color = np.array(to_rgba('purple'))
+    color = np.tile(color, (len(pass_between_home), 1))
+    c_transparency = pass_between_home.pass_count / pass_between_home.pass_count.max()
+    c_transparency = (c_transparency * (1 - MIN_TRANSPARENCY)) + MIN_TRANSPARENCY
+    color[:, 3] = c_transparency
 
-# Plot the pass network
-arrows = pitch.arrows(
-    pass_between_home.x,
-    pass_between_home.y,
-    pass_between_home.x_end,
-    pass_between_home.y_end,
-    lw=c_transparency,
-    color=color,
-    zorder=2,
-    ax=axs['pitch'][0],
-)
-pass_nodes = pitch.scatter(
-    avg_loc_home.x,
-    avg_loc_home.y,
-    color="red",
-    edgecolors="black",
-    s=avg_loc_home.marker_size,
-    linewidth=0.5,
-    alpha=1,
-    ax=axs['pitch'][0],
-)
 
-for index, row in avg_loc_home.iterrows():
-    text = pitch.annotate(
-        row.shirtNo,
-        xy=(row.x, row.y),
-        c="white",
-        va="center",
-        ha="center",
-        size=12,
-        weight="bold",
-        ax=axs['pitch'][0],
-        fontproperties=oswald_regular.prop,
+
+    #Create a VerticalPitch object
+    pitch = VerticalPitch(
+        pitch_type="opta",
+        pitch_color="white",
+        line_color="black",
+        linewidth=1,
     )
-    text.set_path_effects([path_effects.withStroke(linewidth=1, foreground="yellow")])
 
-#2nd Team Pass Network Plots Start
+    fig, axs = pitch.grid(ncols=2,title_height=0.08, endnote_space=0,
+                          # Turn off the endnote/title axis. I usually do this after
+                          # I am happy with the chart layout and text placement
+                          axis=False,
+                      t    itle_space=0, grid_height=0.82, endnote_height=0.05)
 
-# Define your parameters
-MAX_LINE_WIDTH = 500
-MAX_MARKER_SIZE = 1500
-MIN_TRANSPARENCY = 0.0
-
-# Calculate line width and marker size based on your data
-pass_between_away['width'] = (pass_between_away.pass_count / pass_between_away.pass_count.max() * MAX_LINE_WIDTH)
-avg_loc_away['marker_size'] = (avg_loc_away['count'] / avg_loc_away['count'].max() * MAX_MARKER_SIZE)
-
-# Calculate color and transparency
-color1 = np.array(to_rgba('purple'))
-color1 = np.tile(color1, (len(pass_between_away), 1))
-c_transparency1 = pass_between_away.pass_count / pass_between_away.pass_count.max()
-c_transparency1 = (c_transparency1 * (1 - MIN_TRANSPARENCY)) + MIN_TRANSPARENCY
-color1[:, 3] = c_transparency1
-
-
-# Plot the pass network
+    #Plot the pass network
     arrows = pitch.arrows(
-        pass_between_away.x,
-        pass_between_away.y,
-        pass_between_away.x_end,
-        pass_between_away.y_end,
-        lw=c_transparency1,
-        color=color1,
+        pass_between_home.x,
+        pass_between_home.y,
+        pass_between_home.x_end,
+        pass_between_home.y_end,
+        lw=c_transparency,
+        color=color,
         zorder=2,
-        ax=axs['pitch'][1],
+        ax=axs['pitch'][0],
     )
     pass_nodes = pitch.scatter(
-        avg_loc_away.x,
-        avg_loc_away.y,
-        color="skyblue",
+        avg_loc_home.x,
+        avg_loc_home.y,
+        color="red",
         edgecolors="black",
-        s=avg_loc_away.marker_size,
+        s=avg_loc_home.marker_size,
         linewidth=0.5,
         alpha=1,
-        ax=axs['pitch'][1],
-    )
-    
-    for index, row in avg_loc_away.iterrows():
+        ax=axs['pitch'][0],
+        )
+
+    for index, row in avg_loc_home.iterrows():
         text = pitch.annotate(
             row.shirtNo,
             xy=(row.x, row.y),
@@ -192,27 +137,82 @@ color1[:, 3] = c_transparency1
             ha="center",
             size=12,
             weight="bold",
-            ax=axs['pitch'][1],
+            ax=axs['pitch'][0],
             fontproperties=oswald_regular.prop,
         )
-        text.set_path_effects([path_effects.withStroke(linewidth=1, foreground="black")])
+        text.set_path_effects([path_effects.withStroke(linewidth=1, foreground="yellow")])
+
+    #2nd Team Pass Network Plots Start
+
+    # Define your parameters
+    MAX_LINE_WIDTH = 500
+    MAX_MARKER_SIZE = 1500
+    MIN_TRANSPARENCY = 0.0
+
+    # Calculate line width and marker size based on your data
+    pass_between_away['width'] = (pass_between_away.pass_count / pass_between_away.pass_count.max() * MAX_LINE_WIDTH)
+    avg_loc_away['marker_size'] = (avg_loc_away['count'] / avg_loc_away['count'].max() * MAX_MARKER_SIZE)
+
+    # Calculate color and transparency
+    color1 = np.array(to_rgba('purple'))
+    color1 = np.tile(color1, (len(pass_between_away), 1))
+    c_transparency1 = pass_between_away.pass_count / pass_between_away.pass_count.max()
+    c_transparency1 = (c_transparency1 * (1 - MIN_TRANSPARENCY)) + MIN_TRANSPARENCY
+    color1[:, 3] = c_transparency1
+
+
+    # Plot the pass network
+        arrows = pitch.arrows(
+            pass_between_away.x,
+            pass_between_away.y,
+            pass_between_away.x_end,
+            pass_between_away.y_end,
+            lw=c_transparency1,
+            color=color1,
+            zorder=2,
+            ax=axs['pitch'][1],
+            )
+        pass_nodes = pitch.scatter(
+                avg_loc_away.x,
+                avg_loc_away.y,
+                color="skyblue",
+                edgecolors="black",
+                s=avg_loc_away.marker_size,
+                linewidth=0.5,
+                alpha=1,
+                ax=axs['pitch'][1],
+            )    
     
-    # Add labels to the pass networks
-    highlight_text = [{'color': 'red', 'fontproperties': oswald_regular.prop},
-                      {'color': 'skyblue', 'fontproperties': oswald_regular.prop}]
-    ax_text(0.5, 0.7, f"<{TEAM1}> & <{TEAM2}> Pass Networks", fontsize=28, color='#000009',
-                                    fontproperties=oswald_regular.prop,highlight_textprops=highlight_text,
-                                    ha='center', va='center',ax=axs['title'])
-    
-    axs["endnote"].text(
-        1,
-        1,
-        "@athalakbar13 n/
-        data via Opta",
-        color="black",
-        va="center",
-        ha="right",
-        fontsize=12,
-        fontproperties=oswald_regular.prop,
-    )
-    plt.show()
+        for index, row in avg_loc_away.iterrows():
+            text = pitch.annotate(
+                row.shirtNo,
+                xy=(row.x, row.y),
+                c="white",
+                va="center",
+                ha="center",
+                size=12,
+                weight="bold",
+                ax=axs['pitch'][1],
+                fontproperties=oswald_regular.prop,
+            )
+            text.set_path_effects([path_effects.withStroke(linewidth=1, foreground="black")])
+        
+        # Add labels to the pass networks
+        highlight_text = [{'color': 'red', 'fontproperties': oswald_regular.prop},
+                          {'color': 'skyblue', 'fontproperties': oswald_regular.prop}]
+        ax_text(0.5, 0.7, f"<{TEAM1}> & <{TEAM2}> Pass Networks", fontsize=28, color='#000009',
+                                        fontproperties=oswald_regular.prop,highlight_textprops=highlight_text,
+                                        ha='center', va='center',ax=axs['title'])
+        
+        axs["endnote"].text(
+            1,
+            1,
+            "@athalakbar13 n/
+            data via Opta",
+            color="black",
+            va="center",
+            ha="right",
+            fontsize=12,
+            fontproperties=oswald_regular.prop,
+        )
+        plt.show()
