@@ -266,7 +266,8 @@
     axs["endnote"].text(
         1,
         1,
-        "@athalakbar13",
+        "@athalakbar13"/n
+        "data via Opta",
         color="black",
         va="center",
         ha="right",
